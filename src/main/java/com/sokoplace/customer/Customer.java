@@ -16,10 +16,10 @@ public class Customer {
 
     @Id  // Set the primary key
     @GeneratedValue(strategy = GenerationType.IDENTITY)  // Autoincrement
-    private Long customerId;
+    private Long Id;
 
     @Column(name = "name", nullable = false, length = 50)
-    private String username;
+    private String name;
 
     @Column(name = "email", nullable = false, length = 50)
     private String email;

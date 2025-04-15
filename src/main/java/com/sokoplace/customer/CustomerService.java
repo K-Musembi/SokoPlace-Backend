@@ -4,12 +4,13 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-// NB: Though you could inject repositories directly into controllers,
-//     it is best practice to have a service layer.
-//     Service layer incorporates business logic e.g. validation, and
-//     coordinates interactions with more than one repository.
+//  Though you could inject repositories directly into controllers,
+//  it is best practice to have a service layer.
 
-@Service  // Mark as Spring service bean
+//  Service layer incorporates business logic and coordinates
+//  interactions with more than one repository.
+
+@Service  // Mark as Spring service bean (best practice)
 public class CustomerService {
 
     private final CustomerRepository customerRepository;
