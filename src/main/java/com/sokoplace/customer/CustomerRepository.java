@@ -6,10 +6,13 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
-@Repository  // Marks interface as a Spring Bean (good practice)
-public interface CustomerRepository extends JpaRepository<Customer, Long> {
+// JPA parses method names e.g. findByName and creates / implements SQL queries
+// Optional used to handle cases where the object / Entity isn't found
+// Optional methods include: isPresent(), ifPresent(), orElseThrow(), etc.
+// @Repository: Marks interface as a Spring Bean (good practice)
 
-    // NB: JPA parses method names e.g. findByName and creates queries / implements
+@Repository
+public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
     Optional<Customer> findByName(String name);
 
@@ -17,14 +20,14 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
     // search for substring, ignore case
     List<Customer> findByNameContainingIgnoreCase(String name);
-
-    // NB: JPA provides default methods for CRUD operations:
-    // save(S entity), saveAll(Iterable<S> entities)
-    // findById(ID id), existsById(ID id)
-    // findAll(), findAllById(Iterable<ID> ids)
-    // count()
-    // deleteById(ID id), delete(T entity), deleteAll(Iterable<? extends T> entities), deleteAll()
-    // flush()
-    // Paging and sorting methods
-
 }
+
+
+// JPA provides default methods for CRUD operations:
+// save(S entity), saveAll(Iterable<S> entities)
+// findById(ID id), existsById(ID id)
+// findAll(), findAllById(Iterable<ID> ids)
+// count()
+// deleteById(ID id), delete(T entity), deleteAll(Iterable<? extends T> entities), deleteAll()
+// flush()
+// Paging and sorting methods
