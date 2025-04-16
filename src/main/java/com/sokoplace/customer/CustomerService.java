@@ -32,6 +32,10 @@ public class CustomerService {
 
     @Transactional
     public CustomerResponse createCustomer(CustomerRequest customerRequest) {
+        if (customerRepository.existsByEmail(customerRequest.email())) {
+            throw new IllegalArgumentException("Email already registered");
+        }
+
         Customer customer = new Customer();
         customer.setName(customerRequest.name());
         customer.setEmail(customerRequest.email());
@@ -68,15 +72,6 @@ public class CustomerService {
                 .orElseThrow(() -> new RuntimeException("Customer not found"));
 
         return mapToCustomerResponse(customer);
-    }
-
-    @Transactional
-    public List<CustomerResponse> findCustomersBySubString(String name) {
-        List<Customer> customers = customerRepository.findByNameContainingIgnoreCase(name);
-
-        return customers.stream()
-                .map(this::mapToCustomerResponse)
-                .toList();
     }
 
     @Transactional
