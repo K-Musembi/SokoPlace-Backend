@@ -8,7 +8,7 @@ import jakarta.persistence.*;  // JPA annotations: Entity, Table, Id, etc.
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "user")
+@Table(name = "customer")
 @Data  // Lombok annotation: generates getters, setters, toString, equals, hashCode
 @NoArgsConstructor
 @AllArgsConstructor
@@ -42,6 +42,6 @@ public class Customer {
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
     }
-
-    // Other JPA callbacks: @PostPersist, @PostUpdate, @PreRemove, @PostRemove
 }
+
+// Other JPA callbacks: @PostPersist, @PostUpdate, @PreRemove, @PostRemove

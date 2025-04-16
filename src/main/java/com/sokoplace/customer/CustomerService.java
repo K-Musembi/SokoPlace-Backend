@@ -11,13 +11,15 @@ import java.util.List;
 //  Though you could inject repositories directly into controllers,
 //  it is best practice to have a service layer.
 
-//  Service layer incorporates business logic and coordinates
+// Service layer incorporates business logic and coordinates
 //  interactions with more than one repository.
 // @Service: Marks interface as a Spring Bean (good practice)
 // @Autowired: Constructor injection. Use for constructors and setters
 // mapCustomerToCustomerResponse(): Helper method to map Entity -> CustomerResponse
 // Stream<>: accepts elements from List, etc. but doesn't store. For complex operations
 // Stream operations: map, filter, reduce, find, sort, collect
+// findCustomerBy id or email in repository returns an Optional object (in case object not found)
+// use Optional methods: orElseThrow(), orElse(), ifPresent(), etc.
 
 @Service
 public class CustomerService {
@@ -29,23 +31,27 @@ public class CustomerService {
     }
 
     @Transactional
-    public Customer createCustomer(CustomerRequest customerRequest) {
+    public CustomerResponse createCustomer(CustomerRequest customerRequest) {
         Customer customer = new Customer();
         customer.setName(customerRequest.name());
         customer.setEmail(customerRequest.email());
         customer.setPassword(customerRequest.password());  // setter method
 
-        return customerRepository.save(customer);
+        customerRepository.save(customer);
+        return mapToCustomerResponse(customer);
     }
 
     @Transactional
-    public Customer updateCustomer(CustomerRequest customerRequest) {
-        Customer customer = new Customer();
+    public CustomerResponse updateCustomer(Long Id, CustomerRequest customerRequest) {
+        Customer customer = customerRepository.findById(Id)
+                        .orElseThrow(() -> new RuntimeException("Customer not found"));
+
         customer.setName(customerRequest.name());
         customer.setEmail(customerRequest.email());
         customer.setPassword(customerRequest.password());
 
-        return customerRepository.save(customer);
+        customerRepository.save(customer);
+        return mapToCustomerResponse(customer);
     }
 
     @Transactional
@@ -73,14 +79,26 @@ public class CustomerService {
                 .toList();
     }
 
+    @Transactional
+    public List<CustomerResponse> findAllCustomers() {
+        List<Customer> customers = customerRepository.findAll();
+
+        return customers.stream()
+                .map(this::mapToCustomerResponse)
+                .toList();
+    }
+
+    @Transactional
+    public void deleteCustomer(Long Id) {
+        customerRepository.deleteById(Id);
+    }
+
     private CustomerResponse mapToCustomerResponse(Customer customer) {
-        CustomerResponse responseDTO = new CustomerResponse(
+        return new CustomerResponse(
                 customer.getId(),
                 customer.getName(),
                 customer.getEmail()  // getter method
         );
-
-        return responseDTO;
     }
 }
 
