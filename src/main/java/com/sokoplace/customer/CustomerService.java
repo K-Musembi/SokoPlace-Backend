@@ -2,6 +2,7 @@ package com.sokoplace.customer;
 
 import com.sokoplace.customer.dto.CustomerRequest;
 import com.sokoplace.customer.dto.CustomerResponse;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -61,7 +62,7 @@ public class CustomerService {
     @Transactional
     public CustomerResponse findCustomerById(Long Id) {
         Customer customer = customerRepository.findById(Id)
-                .orElseThrow(() -> new RuntimeException("Customer not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Customer not found"));
 
         return mapToCustomerResponse(customer);
     }
@@ -69,7 +70,7 @@ public class CustomerService {
     @Transactional
     public CustomerResponse findCustomerByEmail(String email) {
         Customer customer = customerRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Customer not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Customer not found"));
 
         return mapToCustomerResponse(customer);
     }
