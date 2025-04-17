@@ -13,8 +13,9 @@ import java.util.Optional;
 @Repository
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
-    Optional<Customer> findByEmail(String name);
+    // Custom abstract methods
 
+    Optional<Customer> findByEmail(String name);
     boolean existsByEmail(String email);
 }
 
