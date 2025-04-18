@@ -26,25 +26,25 @@ public class CustomerController {
         this.customerService = customerService;
     }
 
-    @GetMapping("search/{Id}")
+    @GetMapping("/{Id}")
     public ResponseEntity<CustomerResponse> getCustomerById(@PathVariable Long Id) {
         CustomerResponse responseObject = customerService.findCustomerById(Id);
         return ResponseEntity.ok(responseObject);
     }
 
-    @GetMapping("/search/{email}")
+    @GetMapping("/{email}")
     public ResponseEntity<CustomerResponse> getCustomerByEmail(@PathVariable String email) {
         CustomerResponse responseObject = customerService.findCustomerByEmail(email);
         return ResponseEntity.ok(responseObject);
     }
 
-    @GetMapping("/search/all")
-    public ResponseEntity<List<CustomerResponse>> getAllCustomer() {
+    @GetMapping
+    public ResponseEntity<List<CustomerResponse>> getAllCustomers() {
         List<CustomerResponse> responseObject = customerService.findAllCustomers();
         return ResponseEntity.ok(responseObject);
     }
 
-    @PostMapping("/create")
+    @PostMapping
     public ResponseEntity<CustomerResponse> createCustomer(
             @Valid @RequestBody CustomerRequest customerRequest) {
         CustomerResponse responseObject = customerService.createCustomer(customerRequest);
@@ -52,7 +52,7 @@ public class CustomerController {
         return ResponseEntity.status(HttpStatus.CREATED).body(responseObject);
     }
 
-    @PutMapping("/update/{Id}")
+    @PutMapping("/{Id}")
     public ResponseEntity<CustomerResponse> updateCustomer(
             @PathVariable Long Id,
             @Valid @RequestBody CustomerRequest customerRequest) {
@@ -60,10 +60,10 @@ public class CustomerController {
         return ResponseEntity.status(HttpStatus.CREATED).body(responseObject);
     }
 
-    @DeleteMapping("/delete/{Id}")
+    @DeleteMapping("/{Id}")
     public ResponseEntity<Void> deleteCustomer(@PathVariable Long Id) {
         customerService.deleteCustomer(Id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.noContent().build();  // HTTP 204
     }
 
 }

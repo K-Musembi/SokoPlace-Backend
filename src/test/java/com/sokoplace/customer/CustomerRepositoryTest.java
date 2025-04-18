@@ -18,10 +18,13 @@ public class CustomerRepositoryTest {
     @Autowired
     private TestEntityManager testEntityManager;
 
-    private CustomerRepository customerRepository;
-
+    private final CustomerRepository customerRepository;
     private Customer customer1;
     private Customer customer2;
+
+    public CustomerRepositoryTest(CustomerRepository customerRepository) {
+        this.customerRepository = customerRepository;
+    }
 
     @BeforeEach
     void setup() {
