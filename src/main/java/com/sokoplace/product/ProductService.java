@@ -77,11 +77,10 @@ public class ProductService {
     }
 
     @Transactional
-    public ProductResponse deleteProduct(Long Id) {
+    public void deleteProduct(Long Id) {
         Product product = productRepository.findById(Id)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
         productRepository.delete(product);
-        return mapToProductResponse(product);
     }
 
     // Similar lines repeated for createProduct and updateProduct. Common method created
