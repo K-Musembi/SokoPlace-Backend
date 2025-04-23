@@ -18,6 +18,9 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Autoincrement
     private Long Id;
 
+    @Column(name = "sku", nullable = false, length = 20)
+    private String sku;
+
     @Column(name = "category", nullable = false, length = 50)
     private String category;
 

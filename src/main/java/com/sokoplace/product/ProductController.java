@@ -32,6 +32,12 @@ public class ProductController {
         return ResponseEntity.ok(responseObject);
     }
 
+    @GetMapping("/{sku}")
+    public ResponseEntity<ProductResponse> getProductBySku(@PathVariable String sku) {
+        ProductResponse responseObject = productService.findProductBySku(sku);
+        return ResponseEntity.ok(responseObject);
+    }
+
     @GetMapping
     public ResponseEntity<List<ProductResponse>> getProductByCategory(@RequestParam String category) {
         List<ProductResponse> responseObject = productService.findProductByCategory(category);

@@ -14,6 +14,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     List<Product> findByCategory(String category);
     List<Product> findByBrand(String Category, String brand);
     Product findByModel(String Category, String brand, String model);
+    Product findBySku(String sku);
 }
 
 // JPA provides default methods for CRUD operations:

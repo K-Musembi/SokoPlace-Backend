@@ -67,6 +67,12 @@ public class ProductService {
     }
 
     @Transactional
+    public ProductResponse findProductBySku(String sku) {
+        Product product = productRepository.findBySku(sku);
+        return mapToProductResponse(product);
+    }
+
+    @Transactional
     public ProductResponse updateProduct(Long Id, ProductRequest productRequest) {
         Product product = productRepository.findById(Id)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
