@@ -28,10 +28,10 @@ public class Order {
     private LocalDateTime updatedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)  // many order entities relate to one customer entity
-    @JoinColumn(name = "customer_id", nullable = false)
+    @JoinColumn(name = "customerEntity", nullable = false)
     private Customer customer;  // JPA maps database relationships to object relationships
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<Product> orderItems;
 
     @PrePersist
