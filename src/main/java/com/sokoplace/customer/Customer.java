@@ -1,11 +1,14 @@
 package com.sokoplace.customer;
 
+import com.sokoplace.order.Order;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import jakarta.persistence.*;  // JPA annotations: Entity, Table, Id, etc.
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "customer")
@@ -26,6 +29,10 @@ public class Customer {
 
     @Column(name = "password", nullable = false, length = 100)
     private String password;
+
+    // One customer can have many orders. Upon customer removal, orders also removed.
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Order> orders = new ArrayList<>();
 
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;

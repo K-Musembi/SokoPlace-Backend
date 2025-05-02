@@ -1,11 +1,14 @@
 package com.sokoplace.product;
 
+import com.sokoplace.order.Order;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "product")
@@ -38,6 +41,10 @@ public class Product {
 
     @Column(name = "image_url", length = 255)
     private String imageUrl;
+
+    // Many products can be in many orders
+    @ManyToMany(mappedBy = "products")
+    private List<Order> orders = new ArrayList<>();
 
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;

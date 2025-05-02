@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -27,12 +28,20 @@ public class Order {
     @Column(name = "updatedAt")
     private LocalDateTime updatedAt;
 
-    @ManyToOne(fetch = FetchType.LAZY)  // many order entities relate to one customer entity
-    @JoinColumn(name = "customerEntity", nullable = false)
-    private Customer customer;  // JPA maps database relationships to object relationships
+    // Many orders can belong to one customer.
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "customer_id", nullable = false)
+    private Customer customer;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
-    private List<Product> orderItems;
+    // Many orders can have many products
+    // JPA provider, Hibernate, creates a new table called 'order_item'
+    @ManyToMany
+    @JoinTable(
+            name = "order_item",
+            joinColumns = @JoinColumn(name = "order_id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id")
+    )
+    private List<Product> products = new ArrayList<>();
 
     @PrePersist
     protected void onCreate() {
