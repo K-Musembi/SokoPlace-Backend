@@ -25,91 +25,94 @@ public class GlobalExceptionHandler {
     // Data Transfer Object (DTO)
     public record ErrorResponse(String error) {}
 
+    // Option: public ... handleAuthenticationException(AuthenticationException ex)
+    // ...then add 'ex.getMessage' to errorResponse DTO
+
     @ExceptionHandler(AuthenticationException.class)
-    public ResponseEntity<ErrorResponse> handleAuthenticationException(AuthenticationException ex) {
+    public ResponseEntity<ErrorResponse> handleAuthenticationException() {
         ErrorResponse errorResponse = new ErrorResponse("AUTHENTICATION FAILED - CHECK CREDENTIALS");
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);  // 401
     }
 
     @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<ErrorResponse> handleAccessDeniedException(AccessDeniedException ex) {
+    public ResponseEntity<ErrorResponse> handleAccessDeniedException() {
         ErrorResponse errorResponse = new ErrorResponse("ACCESS DENIED");
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(errorResponse);  // 403
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleResourceNotFound(EntityNotFoundException ex) {
+    public ResponseEntity<ErrorResponse> handleResourceNotFound() {
         ErrorResponse errorResponse = new ErrorResponse("RESOURCE NOT FOUND");
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);  // 404
     }
 
     // When you save data that already exists, e.g. unique email address
     @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<ErrorResponse> handleDataIntegrityViolation(DataIntegrityViolationException ex) {
+    public ResponseEntity<ErrorResponse> handleDataIntegrityViolation() {
         ErrorResponse errorResponse = new ErrorResponse("UNIQUE CONSTRAINT ALREADY EXISTS");
         return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);  // 409
     }
 
     // Handle '@Valid' '@RequestBody' validation exceptions
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorResponse> handleValidationException(MethodArgumentNotValidException ex) {
+    public ResponseEntity<ErrorResponse> handleValidationException() {
         ErrorResponse errorResponse = new ErrorResponse("VALIDATION ERROR");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);  // 400
     }
 
     // Handle '@ModelAttribute' form data validation exceptions
     @ExceptionHandler(BindException.class)
-    public ResponseEntity<ErrorResponse> handleBindException(BindException ex) {
+    public ResponseEntity<ErrorResponse> handleBindException() {
         ErrorResponse errorResponse = new ErrorResponse("FORM VALIDATION ERROR");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);  // 400
     }
 
     @ExceptionHandler(MissingPathVariableException.class)
-    public ResponseEntity<ErrorResponse> handlePathVariableException(MissingPathVariableException ex) {
+    public ResponseEntity<ErrorResponse> handlePathVariableException() {
         ErrorResponse errorResponse = new ErrorResponse("MISSING PATH VARIABLE");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
     @ExceptionHandler(MissingServletRequestParameterException.class)
-    public ResponseEntity<ErrorResponse> handleRequestParameterException(MissingServletRequestParameterException ex) {
+    public ResponseEntity<ErrorResponse> handleRequestParameterException() {
         ErrorResponse errorResponse = new ErrorResponse("MISSING REQUEST PARAMETER");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-    public ResponseEntity<ErrorResponse> handleArgumentTypeException(MethodArgumentTypeMismatchException ex) {
+    public ResponseEntity<ErrorResponse> handleArgumentTypeException() {
         ErrorResponse errorResponse = new ErrorResponse("ARGUMENT TYPE MISMATCH");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
     @ExceptionHandler(MissingRequestCookieException.class)
-    public ResponseEntity<ErrorResponse> handleMissingCookieException(MissingRequestCookieException ex) {
+    public ResponseEntity<ErrorResponse> handleMissingCookieException() {
         ErrorResponse errorResponse = new ErrorResponse("MISSING REQUEST COOKIE");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    public ResponseEntity<ErrorResponse> handleHttpMethodException(HttpRequestMethodNotSupportedException ex) {
+    public ResponseEntity<ErrorResponse> handleHttpMethodException() {
         ErrorResponse errorResponse = new ErrorResponse("METHOD NOT SUPPORTED");
         return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(errorResponse);  // 405
     }
 
     @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
-    public ResponseEntity<ErrorResponse> handleResponseFormatNotSupported(HttpMediaTypeNotSupportedException ex) {
+    public ResponseEntity<ErrorResponse> handleResponseFormatNotSupported() {
         ErrorResponse errorResponse = new ErrorResponse("MEDIA FORMAT NOT SUPPORTED");
         return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE).body(errorResponse);  // 415
     }
 
     // Wraps JPA and JDBC exceptions
     @ExceptionHandler(DataAccessException.class)
-    public ResponseEntity<ErrorResponse> handleDatabaseExceptions(DataAccessException ex) {
+    public ResponseEntity<ErrorResponse> handleDatabaseExceptions() {
         ErrorResponse errorResponse = new ErrorResponse("OPERATION NOT SUCCESSFUL");
         return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(errorResponse);  // 503
     }
 
     // General exception handler. Handles any exception not explicitly defined above
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse> handleGeneralException(Exception ex) {
+    public ResponseEntity<ErrorResponse> handleGeneralException() {
         ErrorResponse errorResponse = new ErrorResponse("AN ERROR OCCURRED");
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);  // 500
     }

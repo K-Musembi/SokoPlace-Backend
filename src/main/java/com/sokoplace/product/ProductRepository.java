@@ -15,6 +15,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     List<Product> findByCategoryAndBrand(String category, String brand);
     // Be explicit! Above method if written as 'findByBrand' will cause an error
     // JPA parses the method name to create SQL query
+    List<Product> findByCategoryAndBrandAndModel(String category, String brand, String model);
+
     Product findBySku(String sku);
 }
 

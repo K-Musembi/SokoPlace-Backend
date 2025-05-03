@@ -5,6 +5,7 @@ import com.sokoplace.customer.dto.CustomerResponse;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -34,7 +35,7 @@ public class CustomerService {
     @Transactional
     public CustomerResponse createCustomer(CustomerRequest customerRequest) {
         if (customerRepository.existsByEmail(customerRequest.email())) {
-            throw new IllegalArgumentException("Email already registered");
+            throw new DataIntegrityViolationException("Email already exists");
         }
 
         Customer customer = new Customer();
@@ -48,7 +49,7 @@ public class CustomerService {
     @Transactional
     public CustomerResponse updateCustomer(Long Id, CustomerRequest customerRequest) {
         Customer customer = customerRepository.findById(Id)
-                        .orElseThrow(() -> new RuntimeException("Customer not found"));
+                        .orElseThrow(() -> new EntityNotFoundException("Customer not found"));
 
         customer.setName(customerRequest.name());
         customer.setEmail(customerRequest.email());

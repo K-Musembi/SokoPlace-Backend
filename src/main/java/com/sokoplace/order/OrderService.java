@@ -5,6 +5,7 @@ import com.sokoplace.customer.CustomerRepository;
 import com.sokoplace.order.dto.OrderRequest;
 import com.sokoplace.order.dto.OrderResponse;
 import com.sokoplace.product.Product;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,7 +27,7 @@ public class OrderService {
     @Transactional
     public OrderResponse createOrder(OrderRequest orderRequest) {
         Customer customer = customerRepository.findById(orderRequest.customerId())
-                .orElseThrow(() -> new RuntimeException("Customer not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Customer not found"));
 
         Order order = new Order();
         order.setCustomer(customer);
@@ -39,7 +40,7 @@ public class OrderService {
     @Transactional
     public OrderResponse updateOrder(Long Id, OrderRequest orderRequest) {
         Order order = orderRepository.findById(Id)
-                .orElseThrow(() -> new RuntimeException("Order not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Order not found"));
 
         order.setProducts(orderRequest.orderItems());
 
@@ -50,7 +51,7 @@ public class OrderService {
     @Transactional
     public OrderResponse findOrderById(Long Id) {
         Order order = orderRepository.findById(Id)
-                .orElseThrow(() -> new RuntimeException("Order not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Order not found"));
         return mapToOrderResponse(order);
     }
 
@@ -65,7 +66,7 @@ public class OrderService {
     @Transactional
     public void deleteOrder(Long Id) {
         Order order = orderRepository.findById(Id)
-                .orElseThrow(() -> new RuntimeException("Order not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Order not found"));
         orderRepository.delete(order);
     }
 

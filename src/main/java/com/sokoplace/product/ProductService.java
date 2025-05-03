@@ -5,8 +5,10 @@ package com.sokoplace.product;
 
 import com.sokoplace.product.dto.ProductRequest;
 import com.sokoplace.product.dto.ProductResponse;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,6 +25,12 @@ public class ProductService {
 
     @Transactional
     public ProductResponse createProduct(ProductRequest productRequest) {
+        if (productRepository.findByCategoryAndBrandAndModel(
+                productRequest.category(),
+                productRequest.brand(),
+                productRequest.model()) != null) {
+            throw new DataIntegrityViolationException("Product already exists");
+        }
         Product product = new Product();
         Product createdProduct = getProduct(product, productRequest);
         productRepository.save(createdProduct);
@@ -32,7 +40,7 @@ public class ProductService {
     @Transactional
     public ProductResponse findProductById(Long Id) {
         Product product = productRepository.findById(Id)
-                .orElseThrow(() -> new RuntimeException("Product not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Product not found"));
         return mapToProductResponse(product);
     }
 
@@ -62,7 +70,7 @@ public class ProductService {
     @Transactional
     public ProductResponse updateProduct(Long Id, ProductRequest productRequest) {
         Product product = productRepository.findById(Id)
-                .orElseThrow(() -> new RuntimeException("Product not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Product not found"));
 
         Product updatedProduct = getProduct(product, productRequest);
         productRepository.save(updatedProduct);
@@ -72,7 +80,7 @@ public class ProductService {
     @Transactional
     public void deleteProduct(Long Id) {
         Product product = productRepository.findById(Id)
-                .orElseThrow(() -> new RuntimeException("Product not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Product not found"));
         productRepository.delete(product);
     }
 
