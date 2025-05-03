@@ -45,9 +45,9 @@ public class CustomerControllerTest {
 
     @BeforeEach
     void setup() {
-        validCustomerRequest = new CustomerRequest("test", "test@gmail.com", "Testpw1");
-        validCustomerRequest2 = new CustomerRequest("test2", "test2@gmail.com", "Testpw2");
-        invalidCustomerRequest = new CustomerRequest("", "", "");
+        validCustomerRequest = new CustomerRequest("test", "test@gmail.com");
+        validCustomerRequest2 = new CustomerRequest("test2", "test2@gmail.com");
+        invalidCustomerRequest = new CustomerRequest("", "");
         customerResponse1 = new CustomerResponse(1L, "test", "test@gmail.com");
         customerResponse2 = new CustomerResponse(2L, "test2", "test2@gmail.com");
     }

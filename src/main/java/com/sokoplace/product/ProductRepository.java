@@ -12,8 +12,9 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     // generates the corresponding database query based on those names and parameters.
 
     List<Product> findByCategory(String category);
-    List<Product> findByBrand(String Category, String brand);
-    Product findByModel(String Category, String brand, String model);
+    List<Product> findByCategoryAndBrand(String category, String brand);
+    // Be explicit! Above method if written as 'findByBrand' will cause an error
+    // JPA parses the method name to create SQL query
     Product findBySku(String sku);
 }
 

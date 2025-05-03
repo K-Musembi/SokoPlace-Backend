@@ -39,27 +39,17 @@ public class ProductController {
         return ResponseEntity.ok(responseObject);
     }
 
-    @GetMapping
-    public ResponseEntity<List<ProductResponse>> getProductByCategory(@RequestParam String category) {
+    @GetMapping("/{category}")
+    public ResponseEntity<List<ProductResponse>> getProductByCategory(@PathVariable String category) {
         List<ProductResponse> responseObject = productService.findProductByCategory(category);
         return ResponseEntity.ok(responseObject);
     }
 
-    @GetMapping
+    @GetMapping("/{category}/{brand}")
     public ResponseEntity<List<ProductResponse>> getProductByBrand(
-            @RequestParam String category,
-            @RequestParam String brand) {
+            @PathVariable String category,
+            @PathVariable String brand) {
         List<ProductResponse> responseObject = productService.findProductByBrand(category, brand);
-        return ResponseEntity.ok(responseObject);
-    }
-
-    @GetMapping
-    public ResponseEntity<ProductResponse> getProductByModel(
-            @RequestParam String category,
-            @RequestParam String brand,
-            @RequestParam String model
-    ) {
-        ProductResponse responseObject = productService.findProductByModel(category, brand, model);
         return ResponseEntity.ok(responseObject);
     }
 

@@ -1,9 +1,12 @@
 
 spring:
+  flyway:  # temporary fix: flyway is important for database migration.
+    enabled: false
   datasource:
-    url: jdbc:postgresql://localhost:5432/${POSTGRES_DB}
-    username: ${POSTGRES_USER}
-    password: ${POSTGRES_PASSWORD}
+    url: jdbc:postgresql://localhost:5432/sokoplace_db
+    # username: ${POSTGRES_USER}
+    username: "musembi"
+    password: "my_password"
     driver-class-name: org.postgresql.Driver
     # Connection pool
     hikari:

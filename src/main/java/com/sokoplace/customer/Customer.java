@@ -27,8 +27,8 @@ public class Customer {
     @Column(name = "email", nullable = false, length = 50)
     private String email;
 
-    @Column(name = "password", nullable = false, length = 100)
-    private String password;
+    // @Column(name = "password", nullable = false, length = 100)
+    // private String password;
 
     // One customer can have many orders. Upon customer removal, orders also removed.
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)

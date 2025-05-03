@@ -23,13 +23,6 @@ public class ProductService {
 
     @Transactional
     public ProductResponse createProduct(ProductRequest productRequest) {
-        if (productRepository.findByModel(
-                productRequest.category(),
-                productRequest.brand(),
-                productRequest.model()) != null) {
-            throw new IllegalArgumentException("Product already exists");
-        }
-
         Product product = new Product();
         Product createdProduct = getProduct(product, productRequest);
         productRepository.save(createdProduct);
@@ -54,16 +47,10 @@ public class ProductService {
 
     @Transactional
     public List<ProductResponse> findProductByBrand(String category, String brand) {
-        List<Product> products = productRepository.findByBrand(category, brand);
+        List<Product> products = productRepository.findByCategoryAndBrand(category, brand);
         return products.stream()
                 .map(this::mapToProductResponse)
                 .toList();
-    }
-
-    @Transactional
-    public ProductResponse findProductByModel(String category, String brand, String model) {
-        Product product = productRepository.findByModel(category, brand, model);
-        return mapToProductResponse(product);
     }
 
     @Transactional

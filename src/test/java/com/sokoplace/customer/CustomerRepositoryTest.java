@@ -28,8 +28,8 @@ public class CustomerRepositoryTest {
 
     @BeforeEach
     void setup() {
-        customer1 = new Customer(1L, "test1", "test@gmail.com", "Testpw1", null, null);
-        customer2 = new Customer(2L, "test2", "test@gmail.com", "Testpw2", null, null);
+        customer1 = new Customer(1L, "test1", "test@gmail.com", null, null, null);
+        customer2 = new Customer(2L, "test2", "test@gmail.com", null, null, null);
     }
 
     @Test

@@ -40,9 +40,9 @@ public class OrderController {
         return ResponseEntity.ok(responseObject);  // HTTP 200 -> ok
     }
 
-    @GetMapping
+    @GetMapping("/customer/{id}")
     public ResponseEntity<List<OrderResponse>> getOrderByCustomerId(
-            @RequestParam Long id) {
+            @PathVariable Long id) {
         List<OrderResponse> responseObject = orderService.findOrdersByCustomerId(id);
         return ResponseEntity.ok(responseObject);
     }

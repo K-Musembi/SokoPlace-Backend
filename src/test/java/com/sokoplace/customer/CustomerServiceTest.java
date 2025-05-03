@@ -42,9 +42,9 @@ public class CustomerServiceTest {
 
     @BeforeEach
     void setup() {
-        customerRequest = new CustomerRequest("test", "test@gmail.com", "Testpw1");
-        customer1 = new Customer(1L, "one", "one@gmail.com", "Onepw1", null, null);
-        customer2 = new Customer(2L, "two", "two@gmail.com", "Twopw2", null, null);
+        customerRequest = new CustomerRequest("test", "test@gmail.com");
+        customer1 = new Customer(1L, "one", "one@gmail.com", null, null, null);
+        customer2 = new Customer(2L, "two", "two@gmail.com", null, null, null);
 
         // customerResponse = new CustomerResponse(customer1.getId(), customer1.getName(), customer1.getEmail());
     }
@@ -94,7 +94,7 @@ public class CustomerServiceTest {
     @DisplayName("Should create and return new customer")
     void createCustomer() {
         // Mock repository save operation with ID assigned
-        Customer savedCustomer = new Customer(1L, customerRequest.name(), customerRequest.email(), customerRequest.password(), LocalDateTime.now(), LocalDateTime.now());
+        Customer savedCustomer = new Customer(1L, customerRequest.name(), customerRequest.email(), null, LocalDateTime.now(), LocalDateTime.now());
         // Given
         given(customerRepository.save(any(Customer.class))).willReturn(savedCustomer);
         // Then
@@ -110,7 +110,7 @@ public class CustomerServiceTest {
     @DisplayName("Should update customer when found")
     void updateCustomer() {
         // Create Instance of request dto
-        CustomerRequest updateRequest = new CustomerRequest("updateName", "updateEmail", "Updatepw1");
+        CustomerRequest updateRequest = new CustomerRequest("updateName", "updateEmail");
         // Customer id of customer to update
         Long customerId = 1L;
 

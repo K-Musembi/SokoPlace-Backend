@@ -39,8 +39,7 @@ public class CustomerService {
 
         Customer customer = new Customer();
         customer.setName(customerRequest.name());
-        customer.setEmail(customerRequest.email());
-        customer.setPassword(customerRequest.password());  // setter method
+        customer.setEmail(customerRequest.email());  // setter method
 
         customerRepository.save(customer);
         return mapToCustomerResponse(customer);
@@ -53,7 +52,6 @@ public class CustomerService {
 
         customer.setName(customerRequest.name());
         customer.setEmail(customerRequest.email());
-        customer.setPassword(customerRequest.password());
 
         customerRepository.save(customer);
         return mapToCustomerResponse(customer);
