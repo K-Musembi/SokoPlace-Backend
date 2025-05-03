@@ -25,7 +25,7 @@ public class OrderService {
 
     @Transactional
     public OrderResponse createOrder(OrderRequest orderRequest) {
-        Customer customer = customerRepository.findById(orderRequest.customer().getId())
+        Customer customer = customerRepository.findById(orderRequest.customerId())
                 .orElseThrow(() -> new RuntimeException("Customer not found"));
 
         Order order = new Order();
@@ -37,18 +37,21 @@ public class OrderService {
     }
 
     @Transactional
+    public OrderResponse updateOrder(Long Id, OrderRequest orderRequest) {
+        Order order = orderRepository.findById(Id)
+                .orElseThrow(() -> new RuntimeException("Order not found"));
+
+        order.setProducts(orderRequest.orderItems());
+
+        Order updatedOrder = orderRepository.save(order);
+        return mapToOrderResponse(updatedOrder);
+    }
+
+    @Transactional
     public OrderResponse findOrderById(Long Id) {
         Order order = orderRepository.findById(Id)
                 .orElseThrow(() -> new RuntimeException("Order not found"));
         return mapToOrderResponse(order);
-    }
-
-    @Transactional
-    public List<OrderResponse> findOrdersByCustomer(Customer customer) {
-        List<Order> orders = orderRepository.findOrdersByCustomer(customer);
-        return orders.stream()
-                .map(this::mapToOrderResponse)
-                .toList();
     }
 
     @Transactional
@@ -57,18 +60,6 @@ public class OrderService {
         return orders.stream()
                 .map(this::mapToOrderResponse)
                 .toList();
-    }
-
-    @Transactional
-    public OrderResponse updateOrder(Long Id, OrderRequest orderRequest) {
-        Order order = orderRepository.findById(Id)
-                .orElseThrow(() -> new RuntimeException("Order not found"));
-
-        order.setCustomer(orderRequest.customer());
-        order.setProducts(orderRequest.orderItems());
-
-        Order updatedOrder = orderRepository.save(order);
-        return mapToOrderResponse(updatedOrder);
     }
 
     @Transactional

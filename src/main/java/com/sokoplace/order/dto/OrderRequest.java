@@ -1,16 +1,17 @@
 package com.sokoplace.order.dto;
 
-import com.sokoplace.customer.Customer;
 import com.sokoplace.product.Product;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 
 public record OrderRequest(
 
-        @NotBlank(message = "Customer is required")
-        Customer customer,
+        @NotNull(message = "Customer ID is required")
+        Long customerId,
 
-        @NotBlank(message = "Product list is required")
+        @NotNull(message = "Order list is required")
+        @NotEmpty(message = "Order items cannot be empty")
         List<Product> orderItems
 ) {}

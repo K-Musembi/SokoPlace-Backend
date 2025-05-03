@@ -2,6 +2,7 @@ package com.sokoplace.product;
 
 import com.sokoplace.product.dto.ProductRequest;
 import com.sokoplace.product.dto.ProductResponse;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +14,7 @@ import java.util.List;
 // ResponseEntity.ok(createdProduct) -> 200 Ok, ResponseEntity.status(HttpStatus.CREATED).body(savedProduct) -> 201 created
 // ResponseEntity.notFound(), ResponseEntity.badRequest().body("Invalid"), etc.
 // Create a custom header 'customHeaders' object, then ResponseEntity.ok().headers(customHeaders).body(...)
-// @Valid: corresponds to validation in DTO; for incoming @ResponseBody
+// @Valid: corresponds to validation in DTO; for incoming @RequestBody
 
 @RestController
 @RequestMapping("/api/v1/products")
@@ -63,7 +64,7 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<ProductResponse> createProduct(@RequestBody ProductRequest productRequest) {
+    public ResponseEntity<ProductResponse> createProduct(@Valid @RequestBody ProductRequest productRequest) {
         ProductResponse responseObject = productService.createProduct(productRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseObject);  // successfully created is 201, ok is 200
     }
@@ -71,7 +72,7 @@ public class ProductController {
     @PutMapping("/{id}")
     public ResponseEntity<ProductResponse> updateProduct(
             @PathVariable Long id,
-            @RequestBody ProductRequest productRequest) {
+            @Valid @RequestBody ProductRequest productRequest) {
         ProductResponse responseObject = productService.updateProduct(id, productRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseObject);
     }
