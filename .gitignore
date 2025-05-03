@@ -33,3 +33,8 @@ build/
 .vscode/
 
 get-docker.sh
+
+# Configuration files
+# Configuration files (often contain secrets)
+src/main/resources/application.properties
+src/main/resources/application.yml
