@@ -8,5 +8,7 @@ public record OrderResponse(
         Long Id,
         Long customerId,
         String customerName,
-        List<Product> orderItems
+        List<Product> orderItems,
+        int totalItems,
+        Double totalPrice
 ) {}
