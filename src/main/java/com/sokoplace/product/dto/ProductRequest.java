@@ -6,6 +6,10 @@ import jakarta.validation.constraints.Size;
 
 public record ProductRequest(
 
+        @NotBlank(message = "SKU is required")
+        @Size(min = 2, max = 20, message = "SKU must be between 2 and 20 characters")
+        String sku,
+
         @NotBlank(message = "Category is required")
         @Size(min = 2, max = 50, message = "Category name must be between 2 and 50 characters")
         String category,

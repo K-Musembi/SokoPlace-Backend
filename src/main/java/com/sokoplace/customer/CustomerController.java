@@ -48,7 +48,6 @@ public class CustomerController {
     public ResponseEntity<CustomerResponse> createCustomer(
             @Valid @RequestBody CustomerRequest customerRequest) {
         CustomerResponse responseObject = customerService.createCustomer(customerRequest);
-        //return new ResponseEntity<>(responseObject, HttpStatus.CREATED);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseObject);
     }
 

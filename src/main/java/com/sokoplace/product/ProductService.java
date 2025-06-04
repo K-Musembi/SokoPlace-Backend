@@ -86,6 +86,7 @@ public class ProductService {
 
     // Similar lines repeated for createProduct and updateProduct. Common method created
     private Product getProduct(Product product, ProductRequest productRequest) {
+        product.setSku(productRequest.sku());
         product.setCategory(productRequest.category());
         product.setBrand(productRequest.brand());
         product.setModel(productRequest.model());  // setter method, generated through @Data (Lombok) in model file
