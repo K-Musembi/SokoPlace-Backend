@@ -92,8 +92,8 @@ public class ProductService {
         product.setModel(productRequest.model());  // setter method, generated through @Data (Lombok) in model file
         product.setPrice(productRequest.price());
         product.setDescription(productRequest.description());
-        product.setImageUrl("resources/images/" + productRequest.category() + "/"
-                + productRequest.brand() + "/" + productRequest.model() + ".jpg");
+        product.setImageUrl("/images/" + productRequest.category() + "/"
+                + productRequest.category() + ".jpg");
         return product;
     }
 

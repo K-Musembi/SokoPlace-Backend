@@ -23,6 +23,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(req -> req
                                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()  // allow CORS preflight requests
                                 .requestMatchers("/api/v1/**").permitAll()
+                                .requestMatchers("/images/**").permitAll()
                                 .anyRequest()
                                 .authenticated()
                 );
