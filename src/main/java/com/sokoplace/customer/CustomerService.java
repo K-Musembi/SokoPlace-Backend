@@ -42,8 +42,8 @@ public class CustomerService {
         customer.setName(customerRequest.name());
         customer.setEmail(customerRequest.email());  // setter method
 
-        customerRepository.save(customer);
-        return mapToCustomerResponse(customer);
+        Customer savedCustomer = customerRepository.save(customer);
+        return mapToCustomerResponse(savedCustomer);
     }
 
     @Transactional
@@ -54,8 +54,8 @@ public class CustomerService {
         customer.setName(customerRequest.name());
         customer.setEmail(customerRequest.email());
 
-        customerRepository.save(customer);
-        return mapToCustomerResponse(customer);
+        Customer updatedCustomer = customerRepository.save(customer);
+        return mapToCustomerResponse(updatedCustomer);
     }
 
     @Transactional
@@ -85,6 +85,9 @@ public class CustomerService {
 
     @Transactional
     public void deleteCustomer(Long Id) {
+        if (!customerRepository.existsById(Id)) {
+            throw new EntityNotFoundException("Customer not found");
+        }
         customerRepository.deleteById(Id);
     }
 

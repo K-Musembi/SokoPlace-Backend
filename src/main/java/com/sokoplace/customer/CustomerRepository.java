@@ -15,7 +15,7 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
     // Custom abstract methods
 
-    Optional<Customer> findByEmail(String name);
+    Optional<Customer> findByEmail(String email);
     boolean existsByEmail(String email);
 }
 

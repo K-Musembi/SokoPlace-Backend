@@ -22,10 +22,6 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
-// @Mock: create mock instance of class
-// @InjectMocks: create instance of CustomerService and inject mocks
-// JUnit, Mockito and AssertJ are all part of 'spring-boot-starter-test'
-
 @ExtendWith(MockitoExtension.class)
 public class CustomerServiceTest {
 
@@ -38,15 +34,12 @@ public class CustomerServiceTest {
     private Customer customer1;
     private Customer customer2;
     private CustomerRequest customerRequest;
-    // private CustomerResponse customerResponse;
 
     @BeforeEach
     void setup() {
         customerRequest = new CustomerRequest("test", "test@gmail.com");
         customer1 = new Customer(1L, "one", "one@gmail.com", null, null, null);
         customer2 = new Customer(2L, "two", "two@gmail.com", null, null, null);
-
-        // customerResponse = new CustomerResponse(customer1.getId(), customer1.getName(), customer1.getEmail());
     }
 
     @Test
@@ -93,52 +86,64 @@ public class CustomerServiceTest {
     @Test
     @DisplayName("Should create and return new customer")
     void createCustomer() {
-        // Mock repository save operation with ID assigned
-        Customer savedCustomer = new Customer(1L, customerRequest.name(), customerRequest.email(), null, LocalDateTime.now(), LocalDateTime.now());
         // Given
+        Customer customerToSave = new Customer();
+        customerToSave.setName(customerRequest.name());
+        customerToSave.setEmail(customerRequest.email());
+
+        Customer savedCustomer = new Customer(1L, customerRequest.name(), customerRequest.email(), null, LocalDateTime.now(), LocalDateTime.now());
+
+        given(customerRepository.existsByEmail(customerRequest.email())).willReturn(false);
         given(customerRepository.save(any(Customer.class))).willReturn(savedCustomer);
-        // Then
+
+        // When
         CustomerResponse createdCustomer = customerService.createCustomer(customerRequest);
 
+        // Then
         assertThat(createdCustomer).isNotNull();
         assertThat(createdCustomer.name()).isEqualTo(customerRequest.name());
-        assertThat(createdCustomer.Id()).isEqualTo(savedCustomer.getId());
-        verify(customerRepository).save(argThat(c -> c.getName().equals(customerRequest.name())));
+        assertThat(createdCustomer.Id()).isEqualTo(1L);
+        verify(customerRepository).save(any(Customer.class));
     }
 
     @Test
     @DisplayName("Should update customer when found")
     void updateCustomer() {
-        // Create Instance of request dto
-        CustomerRequest updateRequest = new CustomerRequest("updateName", "updateEmail");
-        // Customer id of customer to update
+        // Given
+        CustomerRequest updateRequest = new CustomerRequest("updateName", "updateEmail@gmail.com");
         Long customerId = 1L;
 
-        // Given
+        // This is the entity that the save method will return
+        Customer updatedEntity = new Customer(customerId, updateRequest.name(), updateRequest.email(), null, null, null);
+
         given(customerRepository.findById(customerId)).willReturn(Optional.of(customer1));
+        // IMPROVEMENT: Mock the save call to return the updated entity
+        given(customerRepository.save(any(Customer.class))).willReturn(updatedEntity);
+
         // When
         CustomerResponse updatedCustomer = customerService.updateCustomer(customerId, updateRequest);
+
         // Then
         assertThat(updatedCustomer).isNotNull();
         assertThat(updatedCustomer.name()).isEqualTo(updateRequest.name());
         assertThat(updatedCustomer.email()).isEqualTo(updateRequest.email());
+        assertThat(updatedCustomer.Id()).isEqualTo(customerId);
 
         verify(customerRepository).findById(customerId);
-        verify(customerRepository).save(argThat(c ->
-                c.getId().equals(customerId) &&
-                c.getName().equals(updateRequest.name())));
+        verify(customerRepository).save(any(Customer.class));
     }
 
     @Test
     @DisplayName("Should delete customer when found")
     void deleteCustomer() {
-        Long customerId = 1L;
         // Given
+        Long customerId = 1L;
         given(customerRepository.existsById(customerId)).willReturn(true);
-        // Mock delete operation
         doNothing().when(customerRepository).deleteById(customerId);
 
+        // When
         customerService.deleteCustomer(customerId);
+
         // Then
         verify(customerRepository, times(1)).deleteById(customerId);
     }

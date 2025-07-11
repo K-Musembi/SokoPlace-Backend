@@ -32,7 +32,7 @@ public class CustomerController {
         return ResponseEntity.ok(responseObject);
     }
 
-    @GetMapping("/{email}")
+    @GetMapping("/email/{email}")
     public ResponseEntity<CustomerResponse> getCustomerByEmail(@Valid @PathVariable String email) {
         CustomerResponse responseObject = customerService.findCustomerByEmail(email);
         return ResponseEntity.ok(responseObject);
@@ -56,7 +56,7 @@ public class CustomerController {
             @PathVariable Long Id,
             @Valid @RequestBody CustomerRequest customerRequest) {
         CustomerResponse responseObject = customerService.updateCustomer(Id, customerRequest);
-        return ResponseEntity.status(HttpStatus.CREATED).body(responseObject);
+        return ResponseEntity.status(HttpStatus.OK).body(responseObject);
     }
 
     @DeleteMapping("/{Id}")
