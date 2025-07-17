@@ -64,6 +64,9 @@ public class ProductService {
     @Transactional
     public ProductResponse findProductBySku(String sku) {
         Product product = productRepository.findBySku(sku);
+        if (product == null) {
+            throw new EntityNotFoundException("Product not found");
+        }
         return mapToProductResponse(product);
     }
 
