@@ -42,8 +42,6 @@ public class OrderServiceTest {
     private Order order1;
     private OrderRequest orderRequest;
     private Customer customer;
-    private Product product1;
-    private Product product2;
 
     @BeforeEach
     void setup() {
@@ -51,8 +49,8 @@ public class OrderServiceTest {
         customer = new Customer(1L, "Test Customer", "test@customer.com", null, LocalDateTime.now(), LocalDateTime.now());
 
         // Setup products to be included in orders
-        product1 = new Product(101L, "SK101", "Electronics", "Samsung", "A15", 299.00, "Latest smartphone", "/path/to/image.jpg", new ArrayList<>(), null, null);
-        product2 = new Product(102L, "SK102", "Electronics", "Nokia", "3310", 199.00, "Latest feature phone", "/path/to/image.jpg", new ArrayList<>(), null, null);
+        Product product1 = new Product(101L, "SK101", "Electronics", "Samsung", "A15", 299.00, "Latest smartphone", "/path/to/image.jpg", new ArrayList<>(), null, null);
+        Product product2 = new Product(102L, "SK102", "Electronics", "Nokia", "3310", 199.00, "Latest feature phone", "/path/to/image.jpg", new ArrayList<>(), null, null);
 
         // Set up an order request DTO for create/update operations
         orderRequest = new OrderRequest(customer.getId(), Arrays.asList(product1, product2));
