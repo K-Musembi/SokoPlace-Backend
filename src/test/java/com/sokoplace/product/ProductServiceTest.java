@@ -64,7 +64,7 @@ public class ProductServiceTest {
         // Then
         assertThat(createdProduct).isNotNull();
         assertThat(createdProduct.Id()).isEqualTo(1L);
-        // assertThat(createdProduct.sku()).isEqualTo(productRequest.sku());
+        assertThat(createdProduct.sku()).isEqualTo(productRequest.sku());
         verify(productRepository).save(any(Product.class));
     }
 
@@ -74,7 +74,7 @@ public class ProductServiceTest {
         // Given
         given(productRepository.findByCategoryAndBrandAndModel(
                 productRequest.category(), productRequest.brand(), productRequest.model()))
-                .willReturn(product1);
+                .willReturn(Optional.ofNullable(product1));
 
         // When & Then
         assertThatThrownBy(() -> productService.createProduct(productRequest))
@@ -144,7 +144,7 @@ public class ProductServiceTest {
         verify(productRepository).findByCategoryAndBrand("Electronics", "Samsung");
     }
 
-    /* @Test
+    @Test
     @DisplayName("Should find product by SKU when it exists")
     void shouldFindProductBySku() {
         // Given
@@ -157,7 +157,7 @@ public class ProductServiceTest {
         assertThat(foundProduct).isNotNull();
         assertThat(foundProduct.sku()).isEqualTo("SKU001");
         verify(productRepository).findBySku("SKU001");
-    } */
+    }
 
     @Test
     @DisplayName("Should throw EntityNotFoundException when SKU does not exist")

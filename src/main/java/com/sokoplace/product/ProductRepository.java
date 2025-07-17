@@ -4,6 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
@@ -15,7 +16,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     List<Product> findByCategoryAndBrand(String category, String brand);
     // Be explicit! Above method if written as 'findByBrand' will cause an error
     // JPA parses the method name to create SQL query
-    List<Product> findByCategoryAndBrandAndModel(String category, String brand, String model);
+    Optional<Product> findByCategoryAndBrandAndModel(String category, String brand, String model);
 
     Product findBySku(String sku);
 }
