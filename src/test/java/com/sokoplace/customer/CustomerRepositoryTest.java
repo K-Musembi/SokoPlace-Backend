@@ -18,23 +18,26 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@Testcontainers
 @DataJpaTest
+@Testcontainers
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class CustomerRepositoryTest {
 
     @Container
-    static PostgreSQLContainer<?> postgresqlContainer = new PostgreSQLContainer<>("postgres:15-alpine");
+    // This container will be started once and shared across all tests that extend this class.
+    static final PostgreSQLContainer<?> postgresqlContainer1 = new PostgreSQLContainer<>("postgres:15-alpine");
 
     @DynamicPropertySource
     static void setProperties(DynamicPropertyRegistry registry) {
-        registry.add("spring.datasource.url", postgresqlContainer::getJdbcUrl);
-        registry.add("spring.datasource.username", postgresqlContainer::getUsername);
-        registry.add("spring.datasource.password", postgresqlContainer::getPassword);
+        registry.add("spring.datasource.url", postgresqlContainer1::getJdbcUrl);
+        registry.add("spring.datasource.username", postgresqlContainer1::getUsername);
+        registry.add("spring.datasource.password", postgresqlContainer1::getPassword);
         // Let Hibernate create the schema for our test container
         registry.add("spring.jpa.hibernate.ddl-auto", () -> "create-drop");
         // Disable Flyway for this test slice
         registry.add("spring.flyway.enabled", () -> "false");
+        // This property was needed for OrderRepositoryTest, it's safe to have it for all.
+        registry.add("spring.jpa.properties.hibernate.globally_quoted_identifiers", () -> "true");
     }
 
     @Autowired

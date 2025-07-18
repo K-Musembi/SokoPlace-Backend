@@ -62,7 +62,7 @@ public class ProductControllerTest {
         mockMvc.perform(get("/api/v1/products/{id}", productId))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.id").value(productResponse1.Id()))
+                .andExpect(jsonPath("$.Id").value(productResponse1.Id()))
                 .andExpect(jsonPath("$.sku").value(productResponse1.sku()))
                 .andExpect(jsonPath("$.model").value(productResponse1.model()));
 
@@ -110,8 +110,8 @@ public class ProductControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.size()").value(2))
-                .andExpect(jsonPath("$[0].name").value("Galaxy S23"))
-                .andExpect(jsonPath("$[1].name").value("iPhone 15"));
+                .andExpect(jsonPath("$[0].model").value("Galaxy S23"))
+                .andExpect(jsonPath("$[1].model").value("iPhone 15"));
 
         verify(productService).findProductByCategory(category);
     }
@@ -147,7 +147,7 @@ public class ProductControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(validProductRequest)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id").value(1L))
+                .andExpect(jsonPath("$.Id").value(1L))
                 .andExpect(jsonPath("$.sku").value("SKU001"));
 
         verify(productService).createProduct(any(ProductRequest.class));
@@ -178,8 +178,8 @@ public class ProductControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(validProductRequest)))
                 .andExpect(status().isCreated()) // Note: Controller returns 201, which is unconventional for PUT update
-                .andExpect(jsonPath("$.id").value(1L))
-                .andExpect(jsonPath("$.name").value("Galaxy S23"));
+                .andExpect(jsonPath("$.Id").value(1L))
+                .andExpect(jsonPath("$.model").value("Galaxy S23"));
 
         verify(productService).updateProduct(eq(productId), any(ProductRequest.class));
     }

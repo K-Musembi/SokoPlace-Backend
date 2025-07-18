@@ -28,7 +28,7 @@ public class ProductService {
         if (productRepository.findByCategoryAndBrandAndModel(
                 productRequest.category(),
                 productRequest.brand(),
-                productRequest.model()).isPresent()) {
+                productRequest.model()) != null) {
             throw new DataIntegrityViolationException("Product already exists");
         }
         Product product = new Product();

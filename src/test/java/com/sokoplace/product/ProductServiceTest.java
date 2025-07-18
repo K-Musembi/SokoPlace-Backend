@@ -74,7 +74,7 @@ public class ProductServiceTest {
         // Given
         given(productRepository.findByCategoryAndBrandAndModel(
                 productRequest.category(), productRequest.brand(), productRequest.model()))
-                .willReturn(Optional.ofNullable(product1));
+                .willReturn((List.of(product1)));
 
         // When & Then
         assertThatThrownBy(() -> productService.createProduct(productRequest))

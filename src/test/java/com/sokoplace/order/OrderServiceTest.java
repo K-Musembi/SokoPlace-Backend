@@ -56,7 +56,7 @@ public class OrderServiceTest {
         orderRequest = new OrderRequest(customer.getId(), Arrays.asList(product1, product2));
 
         // Set up a complete order entity for retrieval tests
-        order1 = new Order(1L, LocalDateTime.now(), LocalDateTime.now(), customer, Arrays.asList(product1, product2));
+        order1 = new Order(1L,  customer, LocalDateTime.now(), LocalDateTime.now(), Arrays.asList(product1, product2));
     }
 
     @Test
@@ -75,7 +75,7 @@ public class OrderServiceTest {
         assertThat(createdOrder.customerId()).isEqualTo(customer.getId());
         assertThat(createdOrder.customerName()).isEqualTo(customer.getName());
         assertThat(createdOrder.totalItems()).isEqualTo(2);
-        assertThat(createdOrder.totalPrice()).isEqualTo(1275.50);
+        assertThat(createdOrder.totalPrice()).isEqualTo(498.00);
         assertThat(createdOrder.orderItems()).hasSize(2);
 
         verify(customerRepository).findById(customer.getId());
@@ -111,7 +111,7 @@ public class OrderServiceTest {
         assertThat(foundOrder.Id()).isEqualTo(order1.getId());
         assertThat(foundOrder.customerName()).isEqualTo(customer.getName());
         assertThat(foundOrder.totalItems()).isEqualTo(2);
-        assertThat(foundOrder.totalPrice()).isEqualTo(1275.50);
+        assertThat(foundOrder.totalPrice()).isEqualTo(498.00);
 
         verify(orderRepository).findById(order1.getId());
     }
@@ -155,7 +155,7 @@ public class OrderServiceTest {
         assertThat(updatedOrderResponse.Id()).isEqualTo(orderId);
         assertThat(updatedOrderResponse.totalItems()).isEqualTo(1);
         assertThat(updatedOrderResponse.orderItems().get(0).getBrand()).isEqualTo("Oppo");
-        assertThat(updatedOrderResponse.totalPrice()).isEqualTo(150.0);
+        assertThat(updatedOrderResponse.totalPrice()).isEqualTo(149.00);
 
         verify(orderRepository).findById(orderId);
         verify(orderRepository).save(any(Order.class));

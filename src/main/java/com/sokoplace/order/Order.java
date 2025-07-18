@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "order")
+@Table(name = "\"order\"")  // Quoted "order" as it's a reserved keyword in SQL
 @Data  // Lombok annotation: generates getters, setters, toString, equals, hashCode
 @NoArgsConstructor
 @AllArgsConstructor
@@ -22,16 +22,16 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "createdAt", updatable = false)
-    private LocalDateTime createdAt;
-
-    @Column(name = "updatedAt")
-    private LocalDateTime updatedAt;
-
     // Many orders can belong to one customer.
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
+
+    @Column(name = "created_at", updatable = false)
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 
     // Many orders can have many products
     // JPA provider, Hibernate, creates a new table called 'order_item'
