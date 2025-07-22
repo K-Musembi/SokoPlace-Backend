@@ -1,4 +1,4 @@
-package com.sokoplace.order;
+package com.sokoplace.customerOrder;
 
 import com.sokoplace.customer.Customer;
 import com.sokoplace.product.Product;
@@ -12,11 +12,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "\"order\"")  // Quoted "order" as it's a reserved keyword in SQL
+@Table(name = "customer_order")
 @Data  // Lombok annotation: generates getters, setters, toString, equals, hashCode
 @NoArgsConstructor
 @AllArgsConstructor
-public class Order {
+public class CustomerOrder {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,7 +38,7 @@ public class Order {
     @ManyToMany
     @JoinTable(
             name = "order_item",
-            joinColumns = @JoinColumn(name = "order_id"),
+            joinColumns = @JoinColumn(name = "customer_order_id"),
             inverseJoinColumns = @JoinColumn(name = "product_id")
     )
     private List<Product> products = new ArrayList<>();

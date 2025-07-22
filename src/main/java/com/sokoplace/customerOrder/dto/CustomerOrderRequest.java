@@ -1,4 +1,4 @@
-package com.sokoplace.order.dto;
+package com.sokoplace.customerOrder.dto;
 
 import com.sokoplace.product.Product;
 import jakarta.validation.constraints.NotEmpty;
@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 
-public record OrderRequest(
+public record CustomerOrderRequest(
 
         @NotNull(message = "Customer ID is required")
         Long customerId,

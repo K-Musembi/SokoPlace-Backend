@@ -64,11 +64,11 @@ public class ProductController {
             @PathVariable Long id,
             @Valid @RequestBody ProductRequest productRequest) {
         ProductResponse responseObject = productService.updateProduct(id, productRequest);
-        return ResponseEntity.status(HttpStatus.CREATED).body(responseObject);
+        return ResponseEntity.status(HttpStatus.OK).body(responseObject);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ProductResponse> deleteProduct(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
         productService.deleteProduct(id);
         return ResponseEntity.noContent().build();
     }

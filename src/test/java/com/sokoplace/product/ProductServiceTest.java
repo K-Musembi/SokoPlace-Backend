@@ -53,7 +53,7 @@ public class ProductServiceTest {
         // Product does not already exist
         given(productRepository.findByCategoryAndBrandAndModel(
                 productRequest.category(), productRequest.brand(), productRequest.model()))
-                .willReturn(null);
+                .willReturn(List.of());
 
         // Mock the save operation to return the product with an ID
         given(productRepository.save(any(Product.class))).willReturn(product1);

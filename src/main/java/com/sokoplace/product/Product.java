@@ -1,6 +1,6 @@
 package com.sokoplace.product;
 
-import com.sokoplace.order.Order;
+import com.sokoplace.customerOrder.CustomerOrder;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -44,7 +44,7 @@ public class Product {
 
     // Many products can be in many orders
     @ManyToMany(mappedBy = "products")
-    private List<Order> orders = new ArrayList<>();
+    private List<CustomerOrder> orders = new ArrayList<>();
 
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;

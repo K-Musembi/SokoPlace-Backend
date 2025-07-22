@@ -1,4 +1,4 @@
-package com.sokoplace.order;
+package com.sokoplace.customerOrder;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -6,10 +6,10 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface OrderRepository extends JpaRepository<Order, Long> {
+public interface CustomerOrderRepository extends JpaRepository<CustomerOrder, Long> {
 
     // JPA passes method names and creates custom SQL queries
-    Optional<Order> findOrdersByCustomerId(Long Id);
+    Optional<CustomerOrder> findOrdersByCustomerId(Long Id);
 
     //List<Order> findByCreatedAtBetween(LocalDateTime startDate, LocalDateTime endDate);
 }

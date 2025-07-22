@@ -1,10 +1,10 @@
-package com.sokoplace.order.dto;
+package com.sokoplace.customerOrder.dto;
 
 import com.sokoplace.product.Product;
 
 import java.util.List;
 
-public record OrderResponse(
+public record CustomerOrderResponse(
         Long Id,
         Long customerId,
         String customerName,

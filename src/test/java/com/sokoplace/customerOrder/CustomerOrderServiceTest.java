@@ -1,9 +1,9 @@
-package com.sokoplace.order;
+package com.sokoplace.customerOrder;
 
 import com.sokoplace.customer.Customer;
 import com.sokoplace.customer.CustomerRepository;
-import com.sokoplace.order.dto.OrderRequest;
-import com.sokoplace.order.dto.OrderResponse;
+import com.sokoplace.customerOrder.dto.CustomerOrderRequest;
+import com.sokoplace.customerOrder.dto.CustomerOrderResponse;
 import com.sokoplace.product.Product;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,19 +28,19 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class OrderServiceTest {
+public class CustomerOrderServiceTest {
 
     @Mock
-    private OrderRepository orderRepository;
+    private CustomerOrderRepository orderRepository;
 
     @Mock
     private CustomerRepository customerRepository;
 
     @InjectMocks
-    private OrderService orderService;
+    private CustomerOrderService orderService;
 
-    private Order order1;
-    private OrderRequest orderRequest;
+    private CustomerOrder order1;
+    private CustomerOrderRequest orderRequest;
     private Customer customer;
 
     @BeforeEach
@@ -53,10 +53,10 @@ public class OrderServiceTest {
         Product product2 = new Product(102L, "SK102", "Electronics", "Nokia", "3310", 199.00, "Latest feature phone", "/path/to/image.jpg", new ArrayList<>(), null, null);
 
         // Set up an order request DTO for create/update operations
-        orderRequest = new OrderRequest(customer.getId(), Arrays.asList(product1, product2));
+        orderRequest = new CustomerOrderRequest(customer.getId(), Arrays.asList(product1, product2));
 
         // Set up a complete order entity for retrieval tests
-        order1 = new Order(1L,  customer, LocalDateTime.now(), LocalDateTime.now(), Arrays.asList(product1, product2));
+        order1 = new CustomerOrder(1L,  customer, LocalDateTime.now(), LocalDateTime.now(), Arrays.asList(product1, product2));
     }
 
     @Test
@@ -64,10 +64,10 @@ public class OrderServiceTest {
     void shouldCreateOrder() {
         // Given
         given(customerRepository.findById(customer.getId())).willReturn(Optional.of(customer));
-        given(orderRepository.save(any(Order.class))).willReturn(order1);
+        given(orderRepository.save(any(CustomerOrder.class))).willReturn(order1);
 
         // When
-        OrderResponse createdOrder = orderService.createOrder(orderRequest);
+        CustomerOrderResponse createdOrder = orderService.createOrder(orderRequest);
 
         // Then
         assertThat(createdOrder).isNotNull();
@@ -79,7 +79,7 @@ public class OrderServiceTest {
         assertThat(createdOrder.orderItems()).hasSize(2);
 
         verify(customerRepository).findById(customer.getId());
-        verify(orderRepository).save(any(Order.class));
+        verify(orderRepository).save(any(CustomerOrder.class));
     }
 
     @Test
@@ -94,7 +94,7 @@ public class OrderServiceTest {
                 .hasMessageContaining("Customer not found");
 
         verify(customerRepository).findById(orderRequest.customerId());
-        verify(orderRepository, never()).save(any(Order.class));
+        verify(orderRepository, never()).save(any(CustomerOrder.class));
     }
 
     @Test
@@ -104,7 +104,7 @@ public class OrderServiceTest {
         given(orderRepository.findById(order1.getId())).willReturn(Optional.of(order1));
 
         // When
-        OrderResponse foundOrder = orderService.findOrderById(order1.getId());
+        CustomerOrderResponse foundOrder = orderService.findOrderById(order1.getId());
 
         // Then
         assertThat(foundOrder).isNotNull();
@@ -137,18 +137,18 @@ public class OrderServiceTest {
         // Given
         Long orderId = order1.getId();
         Product newProduct = new Product(103L, "SK103", "Electronics", "Oppo", "2350", 149.00, "Good smartphone", "/path/to/oppo.img", new ArrayList<>(), null, null);
-        OrderRequest updateRequest = new OrderRequest(customer.getId(), List.of(newProduct));
+        CustomerOrderRequest updateRequest = new CustomerOrderRequest(customer.getId(), List.of(newProduct));
 
-        Order updatedOrderEntity = new Order();
+        CustomerOrder updatedOrderEntity = new CustomerOrder();
         updatedOrderEntity.setId(orderId);
         updatedOrderEntity.setCustomer(customer);
         updatedOrderEntity.setProducts(List.of(newProduct));
 
         given(orderRepository.findById(orderId)).willReturn(Optional.of(order1));
-        given(orderRepository.save(any(Order.class))).willReturn(updatedOrderEntity);
+        given(orderRepository.save(any(CustomerOrder.class))).willReturn(updatedOrderEntity);
 
         // When
-        OrderResponse updatedOrderResponse = orderService.updateOrder(orderId, updateRequest);
+        CustomerOrderResponse updatedOrderResponse = orderService.updateOrder(orderId, updateRequest);
 
         // Then
         assertThat(updatedOrderResponse).isNotNull();
@@ -158,7 +158,7 @@ public class OrderServiceTest {
         assertThat(updatedOrderResponse.totalPrice()).isEqualTo(149.00);
 
         verify(orderRepository).findById(orderId);
-        verify(orderRepository).save(any(Order.class));
+        verify(orderRepository).save(any(CustomerOrder.class));
     }
 
     @Test
@@ -174,7 +174,7 @@ public class OrderServiceTest {
                 .hasMessageContaining("Order not found");
 
         verify(orderRepository).findById(nonExistentId);
-        verify(orderRepository, never()).save(any(Order.class));
+        verify(orderRepository, never()).save(any(CustomerOrder.class));
     }
 
 
@@ -190,7 +190,7 @@ public class OrderServiceTest {
         given(orderRepository.findOrdersByCustomerId(customerId)).willReturn(Optional.of(order1));
 
         // When
-        List<OrderResponse> orders = orderService.findOrdersByCustomerId(customerId);
+        List<CustomerOrderResponse> orders = orderService.findOrdersByCustomerId(customerId);
 
         // Then
         assertThat(orders).isNotNull().hasSize(1);
@@ -207,7 +207,7 @@ public class OrderServiceTest {
         given(orderRepository.findOrdersByCustomerId(customerId)).willReturn(Optional.empty());
 
         // When
-        List<OrderResponse> orders = orderService.findOrdersByCustomerId(customerId);
+        List<CustomerOrderResponse> orders = orderService.findOrdersByCustomerId(customerId);
 
         // Then
         assertThat(orders).isNotNull().isEmpty();
@@ -244,6 +244,6 @@ public class OrderServiceTest {
                 .hasMessageContaining("Order not found");
 
         verify(orderRepository).findById(nonExistentId);
-        verify(orderRepository, never()).delete(any(Order.class));
+        verify(orderRepository, never()).delete(any(CustomerOrder.class));
     }
 }

@@ -177,7 +177,7 @@ public class ProductControllerTest {
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(validProductRequest)))
-                .andExpect(status().isCreated()) // Note: Controller returns 201, which is unconventional for PUT update
+                .andExpect(status().isOk())
                 .andExpect(jsonPath("$.Id").value(1L))
                 .andExpect(jsonPath("$.model").value("Galaxy S23"));
 

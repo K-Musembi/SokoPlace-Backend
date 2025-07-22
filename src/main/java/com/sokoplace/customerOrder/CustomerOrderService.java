@@ -1,9 +1,9 @@
-package com.sokoplace.order;
+package com.sokoplace.customerOrder;
 
 import com.sokoplace.customer.Customer;
 import com.sokoplace.customer.CustomerRepository;
-import com.sokoplace.order.dto.OrderRequest;
-import com.sokoplace.order.dto.OrderResponse;
+import com.sokoplace.customerOrder.dto.CustomerOrderRequest;
+import com.sokoplace.customerOrder.dto.CustomerOrderResponse;
 import com.sokoplace.product.Product;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -14,51 +14,51 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class OrderService {
+public class CustomerOrderService {
 
-    private final OrderRepository orderRepository;
+    private final CustomerOrderRepository orderRepository;
     private final CustomerRepository customerRepository;
 
     @Autowired
-    public OrderService(OrderRepository orderRepository, CustomerRepository customerRepository) {
+    public CustomerOrderService(CustomerOrderRepository orderRepository, CustomerRepository customerRepository) {
         this.orderRepository = orderRepository;
         this.customerRepository = customerRepository;
     }
 
     @Transactional
-    public OrderResponse createOrder(OrderRequest orderRequest) {
+    public CustomerOrderResponse createOrder(CustomerOrderRequest orderRequest) {
         Customer customer = customerRepository.findById(orderRequest.customerId())
                 .orElseThrow(() -> new EntityNotFoundException("Customer not found"));
 
-        Order order = new Order();
+        CustomerOrder order = new CustomerOrder();
         order.setCustomer(customer);
         order.setProducts(orderRequest.orderItems());
 
-        Order savedOrder = orderRepository.save(order);
+        CustomerOrder savedOrder = orderRepository.save(order);
         return mapToOrderResponse(savedOrder);
     }
 
     @Transactional
-    public OrderResponse updateOrder(Long Id, OrderRequest orderRequest) {
-        Order order = orderRepository.findById(Id)
+    public CustomerOrderResponse updateOrder(Long Id, CustomerOrderRequest orderRequest) {
+        CustomerOrder order = orderRepository.findById(Id)
                 .orElseThrow(() -> new EntityNotFoundException("Order not found"));
 
         order.setProducts(orderRequest.orderItems());
 
-        Order updatedOrder = orderRepository.save(order);
+        CustomerOrder updatedOrder = orderRepository.save(order);
         return mapToOrderResponse(updatedOrder);
     }
 
     @Transactional
-    public OrderResponse findOrderById(Long Id) {
-        Order order = orderRepository.findById(Id)
+    public CustomerOrderResponse findOrderById(Long Id) {
+        CustomerOrder order = orderRepository.findById(Id)
                 .orElseThrow(() -> new EntityNotFoundException("Order not found"));
         return mapToOrderResponse(order);
     }
 
     @Transactional
-    public List<OrderResponse> findOrdersByCustomerId(Long Id) {
-        Optional<Order> orders = orderRepository.findOrdersByCustomerId(Id);
+    public List<CustomerOrderResponse> findOrdersByCustomerId(Long Id) {
+        Optional<CustomerOrder> orders = orderRepository.findOrdersByCustomerId(Id);
         return orders.stream()
                 .map(this::mapToOrderResponse)
                 .toList();
@@ -66,17 +66,17 @@ public class OrderService {
 
     @Transactional
     public void deleteOrder(Long Id) {
-        Order order = orderRepository.findById(Id)
+        CustomerOrder order = orderRepository.findById(Id)
                 .orElseThrow(() -> new EntityNotFoundException("Order not found"));
         orderRepository.delete(order);
     }
 
-    private OrderResponse mapToOrderResponse(Order order) {
+    private CustomerOrderResponse mapToOrderResponse(CustomerOrder order) {
         Double totalPrice = 0.0;
         for (Product product : order.getProducts()) {
             totalPrice += product.getPrice();
         }
-        return new OrderResponse(
+        return new CustomerOrderResponse(
                 order.getId(),
                 order.getCustomer().getId(),
                 order.getCustomer().getName(),  // getter and setter methods offered by Lombok in entity class

@@ -1,5 +1,6 @@
 package com.sokoplace.customer;
 
+import com.sokoplace.test.DatabaseIntegrationTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -7,10 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
-import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.util.List;
@@ -21,24 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DataJpaTest
 @Testcontainers
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-public class CustomerRepositoryTest {
-
-    @Container
-    // This container will be started once and shared across all tests that extend this class.
-    static final PostgreSQLContainer<?> postgresqlContainer1 = new PostgreSQLContainer<>("postgres:15-alpine");
-
-    @DynamicPropertySource
-    static void setProperties(DynamicPropertyRegistry registry) {
-        registry.add("spring.datasource.url", postgresqlContainer1::getJdbcUrl);
-        registry.add("spring.datasource.username", postgresqlContainer1::getUsername);
-        registry.add("spring.datasource.password", postgresqlContainer1::getPassword);
-        // Let Hibernate create the schema for our test container
-        registry.add("spring.jpa.hibernate.ddl-auto", () -> "create-drop");
-        // Disable Flyway for this test slice
-        registry.add("spring.flyway.enabled", () -> "false");
-        // This property was needed for OrderRepositoryTest, it's safe to have it for all.
-        registry.add("spring.jpa.properties.hibernate.globally_quoted_identifiers", () -> "true");
-    }
+public class CustomerRepositoryTest extends DatabaseIntegrationTest {
 
     @Autowired
     private TestEntityManager testEntityManager;

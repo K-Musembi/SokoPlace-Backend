@@ -1,6 +1,6 @@
 package com.sokoplace.customer;
 
-import com.sokoplace.order.Order;
+import com.sokoplace.customerOrder.CustomerOrder;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -32,7 +32,7 @@ public class Customer {
 
     // One customer can have many orders. Upon customer removal, orders also removed.
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Order> orders = new ArrayList<>();
+    private List<CustomerOrder> orders = new ArrayList<>();
 
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;

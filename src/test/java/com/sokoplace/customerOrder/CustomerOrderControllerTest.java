@@ -1,8 +1,8 @@
-package com.sokoplace.order;
+package com.sokoplace.customerOrder;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sokoplace.order.dto.OrderRequest;
-import com.sokoplace.order.dto.OrderResponse;
+import com.sokoplace.customerOrder.dto.CustomerOrderRequest;
+import com.sokoplace.customerOrder.dto.CustomerOrderResponse;
 import com.sokoplace.product.Product;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,23 +27,23 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(OrderController.class)
+@WebMvcTest(CustomerOrderController.class)
 @WithMockUser // Simulate an authenticated user for all tests (Spring Security)
-public class OrderControllerTest {
+public class CustomerOrderControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     @MockitoBean // Use @MockitoBean to mock the service layer in a @WebMvcTest
-    private OrderService orderService;
+    private CustomerOrderService orderService;
 
     @Autowired
     private ObjectMapper objectMapper;
 
-    private OrderRequest validOrderRequest;
-    private OrderRequest invalidOrderRequest;
-    private OrderResponse orderResponse1;
-    private OrderResponse orderResponse2;
+    private CustomerOrderRequest validOrderRequest;
+    private CustomerOrderRequest invalidOrderRequest;
+    private CustomerOrderResponse orderResponse1;
+    private CustomerOrderResponse orderResponse2;
 
     @BeforeEach
     void setup() {
@@ -53,14 +53,14 @@ public class OrderControllerTest {
         List<Product> products = List.of(product1, product2);
 
         // A valid request to create/update an order
-        validOrderRequest = new OrderRequest(1L, products);
+        validOrderRequest = new CustomerOrderRequest(1L, products);
 
         // An invalid request that should be caught by @Valid
-        invalidOrderRequest = new OrderRequest(null, Collections.emptyList());
+        invalidOrderRequest = new CustomerOrderRequest(null, Collections.emptyList());
 
         // Sample responses returned from the mocked service
-        orderResponse1 = new OrderResponse(1L, 1L, "Test Customer", products, 2, 1225.50);
-        orderResponse2 = new OrderResponse(2L, 2L, "Another Customer", List.of(product1), 1, 1200.50);
+        orderResponse1 = new CustomerOrderResponse(1L, 1L, "Test Customer", products, 2, 1225.50);
+        orderResponse2 = new CustomerOrderResponse(2L, 2L, "Another Customer", List.of(product1), 1, 1200.50);
     }
 
     // --- POST /api/v1/orders ---
@@ -68,7 +68,7 @@ public class OrderControllerTest {
     @Test
     @DisplayName("POST /api/v1/orders - Should create a new order with valid data")
     void createOrder_withValidRequest_shouldReturnCreated() throws Exception {
-        given(orderService.createOrder(any(OrderRequest.class))).willReturn(orderResponse1);
+        given(orderService.createOrder(any(CustomerOrderRequest.class))).willReturn(orderResponse1);
 
         mockMvc.perform(post("/api/v1/orders")
                         .with(csrf()) // Add CSRF token for security
@@ -82,7 +82,7 @@ public class OrderControllerTest {
                 .andExpect(jsonPath("$.totalItems").value(orderResponse1.totalItems()))
                 .andExpect(jsonPath("$.totalPrice").value(orderResponse1.totalPrice()));
 
-        verify(orderService).createOrder(any(OrderRequest.class));
+        verify(orderService).createOrder(any(CustomerOrderRequest.class));
     }
 
     @Test
@@ -106,7 +106,7 @@ public class OrderControllerTest {
         Long orderId = 1L;
         // Note: The controller's update method returns 201 CREATED. While 200 OK is more common for PUT,
         // we test the actual implemented behavior.
-        given(orderService.updateOrder(eq(orderId), any(OrderRequest.class))).willReturn(orderResponse1);
+        given(orderService.updateOrder(eq(orderId), any(CustomerOrderRequest.class))).willReturn(orderResponse1);
 
         mockMvc.perform(put("/api/v1/orders/{id}", orderId)
                         .with(csrf())
@@ -116,14 +116,14 @@ public class OrderControllerTest {
                 .andExpect(jsonPath("$.Id").value(orderResponse1.Id()))
                 .andExpect(jsonPath("$.customerName").value(orderResponse1.customerName()));
 
-        verify(orderService).updateOrder(eq(orderId), any(OrderRequest.class));
+        verify(orderService).updateOrder(eq(orderId), any(CustomerOrderRequest.class));
     }
 
     @Test
     @DisplayName("PUT /api/v1/orders/{id} - Should return 404 Not Found if order does not exist")
     void updateOrder_whenOrderDoesNotExist_shouldReturnNotFound() throws Exception {
         Long orderId = 99L;
-        given(orderService.updateOrder(eq(orderId), any(OrderRequest.class)))
+        given(orderService.updateOrder(eq(orderId), any(CustomerOrderRequest.class)))
                 .willThrow(new EntityNotFoundException("Order not found"));
 
         mockMvc.perform(put("/api/v1/orders/{id}", orderId)
@@ -132,7 +132,7 @@ public class OrderControllerTest {
                         .content(objectMapper.writeValueAsString(validOrderRequest)))
                 .andExpect(status().isNotFound());
 
-        verify(orderService).updateOrder(eq(orderId), any(OrderRequest.class));
+        verify(orderService).updateOrder(eq(orderId), any(CustomerOrderRequest.class));
     }
 
     // --- GET /api/v1/orders/{id} ---
@@ -170,7 +170,7 @@ public class OrderControllerTest {
     @DisplayName("GET /api/v1/orders/customer/{id} - Should return list of orders for a customer")
     void getOrdersByCustomerId_whenOrdersExist_shouldReturnListOfOrders() throws Exception {
         Long customerId = 1L;
-        List<OrderResponse> customerOrders = List.of(orderResponse1, orderResponse2);
+        List<CustomerOrderResponse> customerOrders = List.of(orderResponse1, orderResponse2);
         given(orderService.findOrdersByCustomerId(customerId)).willReturn(customerOrders);
 
         mockMvc.perform(get("/api/v1/orders/customer/{id}", customerId))
