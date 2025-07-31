@@ -25,16 +25,19 @@ public class ProductService {
 
     @Transactional
     public ProductResponse createProduct(ProductRequest productRequest) {
-        if (productRepository.findByCategoryAndBrandAndModel(
+        List<Product> existingProducts = productRepository.findByCategoryAndBrandAndModel(
                 productRequest.category(),
                 productRequest.brand(),
-                productRequest.model()) != null) {
+                productRequest.model());
+
+        if (!existingProducts.isEmpty()) {
             throw new DataIntegrityViolationException("Product already exists");
         }
+
         Product product = new Product();
         Product createdProduct = getProduct(product, productRequest);
-        productRepository.save(createdProduct);
-        return mapToProductResponse(createdProduct);
+        Product savedProduct = productRepository.save(createdProduct);
+        return mapToProductResponse(savedProduct);
     }
 
     @Transactional
