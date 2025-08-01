@@ -4,15 +4,14 @@ import com.sokoplace.customer.Customer;
 import com.sokoplace.customer.CustomerRepository;
 import com.sokoplace.product.Product;
 import com.sokoplace.product.ProductRepository;
-import com.sokoplace.test.DatabaseIntegrationTest;
+import com.sokoplace.test.TestcontainersConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.testcontainers.junit.jupiter.Testcontainers;
+import org.springframework.context.annotation.Import;
 
 // import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -22,9 +21,8 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
-@Testcontainers
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-public class CustomerOrderRepositoryTest extends DatabaseIntegrationTest {
+@Import(TestcontainersConfig.class)
+public class CustomerOrderRepositoryTest {
 
     @Autowired
     private TestEntityManager testEntityManager;

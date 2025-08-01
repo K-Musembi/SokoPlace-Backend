@@ -1,10 +1,12 @@
 package com.sokoplace.product;
 
-import com.sokoplace.test.DatabaseIntegrationTest;
+import com.sokoplace.test.TestcontainersConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.dao.DataIntegrityViolationException;
 
 import java.util.ArrayList;
@@ -14,8 +16,9 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-
-public class ProductRepositoryTest extends DatabaseIntegrationTest {
+@DataJpaTest
+@Import(TestcontainersConfig.class)
+public class ProductRepositoryTest {
 
     @Autowired
     private ProductRepository productRepository;
